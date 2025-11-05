@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { useHotelStore } from '@/stores/useHotelStore'
 
-
 const hotelFormSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     description: z.string().optional(),
@@ -26,7 +25,6 @@ const hotelFormSchema = z.object({
     rating: z.preprocess((val) => Number(val), z.number().min(0).max(5)).optional(),
     pricePerNight: z.preprocess((val) => Number(val), z.number().min(0, { message: "Price must be a positive number." })),
 });
-
 
 const HotelsForm = () => {
     const { fetchHotels } = useHotelStore();

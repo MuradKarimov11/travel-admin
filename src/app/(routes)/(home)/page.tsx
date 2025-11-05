@@ -1,6 +1,5 @@
-import Image from "next/image";
+
 import {
-  ClerkProvider,
   SignInButton,
   SignedIn,
   SignedOut,
@@ -11,7 +10,6 @@ export default function Home() {
   return (
     <div>
       Home
-
       <SignedOut>
         <SignInButton />
       </SignedOut>
