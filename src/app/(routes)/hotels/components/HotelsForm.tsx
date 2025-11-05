@@ -56,30 +56,24 @@ const HotelsForm = () => {
         }
 
         try {
-
             const response = await fetch("/api/hotels", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(hotelData),
-
             });
 
             if (!response.ok) {
                 throw new Error("Failed to add hotel");
             }
-
             console.log("Hotel added successfully");
             form.reset();
             fetchHotels();
 
         } catch (error) {
             console.error("Error adding hotel:", error);
-
         }
-
-
         console.log(values)
     }
 
