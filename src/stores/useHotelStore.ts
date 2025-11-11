@@ -3,7 +3,11 @@ import { create } from "zustand";
 export type Hotel = {
     id: string;
     name: string;
+    description?: string | null;
+    location: string;
+    address: string;
     rating: number;
+    photos?: string[];
     pricePerNight: number;
     rooms: Array<{
         id: string;
@@ -48,7 +52,8 @@ export const useHotelStore = create<HotelStore>((set) => ({
             set({ hotels: data.hotels, totalCount: data.totalCount, loading: false });
 
         } catch (error) {
-            set({error: error.message || "Unknown error", loading: false });
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
+            set({ error: errorMessage, loading: false });
         }
     },
 }));

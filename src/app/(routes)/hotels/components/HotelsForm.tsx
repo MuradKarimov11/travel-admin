@@ -30,14 +30,13 @@ const HotelsForm = () => {
     const { fetchHotels } = useHotelStore();
 
     const form = useForm<z.infer<typeof hotelFormSchema>>({
-        resolver: zodResolver(hotelFormSchema),
+        resolver: zodResolver(hotelFormSchema) as any,
         defaultValues: {
             name: "",
             description: "",
             location: "",
             address: "",
             rating: 0,
-            photos: "",
             pricePerNight: 0,
         },
     });

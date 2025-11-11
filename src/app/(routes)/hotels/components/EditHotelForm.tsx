@@ -31,8 +31,15 @@ const hotelFormSchema = z.object({
     description: z.string().optional(),
     location: z.string().min(2, { message: "Location is required." }),
     address: z.string().min(5, { message: "Address is required and must be at least 5 characters." }),
-    rating: z.preprocess((val) => Number(val), z.number().min(0).max(5)).optional(),
-    pricePerNight: z.preprocess((val) => Number(val), z.number().min(0, { message: "Price must be a positive number." })),
+    rating: z.preprocess((val) => {
+        if (val === "" || val === null || val === undefined) return undefined;
+        return Number(val);
+    }, z.number().min(0).max(5)).optional(),
+    pricePerNight: z.preprocess((val) => {
+        // handle empty string coming from inputs, and convert to number otherwise
+        if (val === "" || val === null || val === undefined) return undefined;
+        return Number(val);
+    }, z.number().min(0, { message: "Price must be a positive number." })),
 });
 
 interface EditHotelFormProps {
@@ -44,15 +51,16 @@ interface EditHotelFormProps {
 const EditHotelForm = ({ initialHotel, onOpenChange, open }: EditHotelFormProps) => {
     const { fetchHotels } = useHotelStore();
 
-    const form = useForm<z.infer<typeof hotelFormSchema>>({
-        resolver: zodResolver(hotelFormSchema),
+    type FormSchema = z.infer<typeof hotelFormSchema>;
+
+    const form = useForm<FormSchema>({
+        resolver: zodResolver(hotelFormSchema) as any,
         defaultValues: {
             name: "",
             description: "",
             location: "",
             address: "",
-            rating: 0,
-            photos: "",
+            rating: undefined,
             pricePerNight: 0,
         },
     });
@@ -107,7 +115,7 @@ const EditHotelForm = ({ initialHotel, onOpenChange, open }: EditHotelFormProps)
 
             console.log("Hotel updated successfully");
             onOpenChange(false);
-            fetchHotels("");
+            fetchHotels();
 
         } catch (error) {
             console.error("PUT request error:", error);
@@ -208,7 +216,7 @@ const EditHotelForm = ({ initialHotel, onOpenChange, open }: EditHotelFormProps)
                                     )}
                                 />
 
-                                <Button type="submit">Add Hotel</Button>
+                                <Button type="submit">Save Changes</Button>
                             </form>
                         </Form>
                     </DialogDescription>
